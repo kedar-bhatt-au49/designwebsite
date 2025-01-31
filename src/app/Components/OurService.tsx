@@ -67,18 +67,22 @@ const OurService = () => {
   ];
 
   return (
-    <section className="py-16 px-8 mt-32">
-      <div className="container mx-auto">
+    <section className="relative py-16 px-8 mt-32">
+     <div className="absolute inset-0 -z-10 w-full h-full">
+
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-100/40 via-white/60 to-blue-50/40" />
+      </div>
+
+      <div className="container mx-auto relative z-10">
         <div className="relative inline-block">
-          <h1 
-            className={`text-4xl md:text-5xl font-bold text-gray-800 mb-12 transition-all duration-700 transform ${
-              isVisible ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
-            } hover:text-blue-600 hover:font-extrabold cursor-pointer group`}
-          >
+          <h1 className={`text-4xl md:text-5xl font-bold text-gray-800 mb-12 transition-all duration-700 transform ${
+            isVisible ? 'translate-x-0 opacity-100' : '-translate-x-full opacity-0'
+          } hover:text-blue-600 hover:font-extrabold cursor-pointer group`}>
             Explore our services
             <span className="absolute bottom-0 left-0 w-0 h-1 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
           </h1>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
           {services.map((service, index) => (
             <div key={index} className="group relative">

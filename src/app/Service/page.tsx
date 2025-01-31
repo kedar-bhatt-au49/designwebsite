@@ -5,11 +5,7 @@ import Footer from '@/app/Components/Footer'
 function Service() {
   return (
     <div className="min-h-screen" style={{
-      backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.8)), url('/Services-Background.jpg')`,
-      backgroundSize: 'cover',
-      backgroundPosition: 'center',
-      backgroundRepeat: 'no-repeat',
-      backgroundAttachment: 'fixed'
+      background: `linear-gradient(to top right,rgb(175, 177, 180), #ffffff,rgb(130, 131, 132))`
     }}>
       <ServicePageMain/>
       <OurService/>

@@ -11,10 +11,10 @@ const ServicePageMain = () => {
   const [showContactForm, setShowContactForm] = useState(false);
   
   const slides = [
-    '/blue.jpg',
-    '/digital.jpeg',
-    '/Web-dev.webp',
-    '/UI-UX.jpg',
+    '/colorful-.jpg',
+    '/digitalmarket.webp',
+    '/webdev.webp',
+    '/uiweb.png',
   ];
 
   useEffect(() => {
@@ -38,24 +38,38 @@ const ServicePageMain = () => {
   return (
     <>
       <div className="relative h-[45vh] sm:h-[50vh] md:h-[60vh] lg:h-[65vh] w-full">
-        {slides.map((slide, index) => (
-          <div
-            key={index}
-            className={`absolute w-full h-full transition-opacity duration-1000 ease-in-out ${
-              currentSlide === index ? 'opacity-100' : 'opacity-0'
-            }`}
-          >
-            <Image
-              src={slide}
-              alt={`Slide ${index + 1}`}
-              fill
-              sizes="100vw"
-              className="object-cover"
-              priority={index === 0}
-            />
-          </div>
-        ))}
+        <div className="absolute inset-0 w-full h-full">
+          {slides.map((slide, index) => (
+            <div
+              key={index}
+              className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${
+                currentSlide === index ? 'opacity-100' : 'opacity-0'
+              }`}
+            >
+              <div className="relative w-full h-full">
+                <Image
+                  src={slide}
+                  alt={`Slide ${index + 1}`}
+                  fill
+                  quality={100}
+                  className="object-cover object-center w-full h-full"
+                  sizes="(max-width: 480px) 100vw,
+                         (max-width: 768px) 100vw,
+                         (max-width: 1024px) 100vw,
+                         (max-width: 1280px) 100vw,
+                         100vw"
+                  style={{
+                    objectFit: 'cover',
+                    objectPosition: 'center',
+                  }}
+                  priority={index === 0}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
 
+        {/* Rest of the code remains the same */}
         <div className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'border-2 border-black shadow-lg' : ''}`}>
           <div className="bg-white/90 h-16 w-full px-8 flex items-center justify-between hover:border-2 hover:border-black transition-all duration-300">
             <div className="flex items-center gap-2 text-gray-600">

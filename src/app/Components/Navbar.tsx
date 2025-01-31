@@ -50,16 +50,13 @@ const Navbar = () => {
                 </a>
               </div>
               <div className="flex space-x-4">
-                <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" 
-                   className="text-white hover:text-blue-400 transition-colors">
+                <a href="#" className="text-white hover:text-blue-400 transition-colors">
                   <FaLinkedin size={20} />
                 </a>
-                <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" 
-                   className="text-white hover:text-blue-400 transition-colors">
+                <a href="#" className="text-white hover:text-blue-400 transition-colors">
                   <FaFacebook size={20} />
                 </a>
-                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" 
-                   className="text-white hover:text-blue-400 transition-colors">
+                <a href="#" className="text-white hover:text-blue-400 transition-colors">
                   <FaInstagram size={20} />
                 </a>
               </div>
