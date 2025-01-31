@@ -1,46 +1,47 @@
 {
   "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-88e8c2996c15b7e9.js",
+      "static/chunks/4bd1b696-aaf09b882924c802.js",
+      "static/chunks/517-18179d5cba98216a.js",
+      "static/chunks/main-app-49217dcecddaa28d.js",
+      "static/chunks/app/_not-found/page-ee4a26ba120725f5.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-88e8c2996c15b7e9.js",
+      "static/chunks/4bd1b696-aaf09b882924c802.js",
+      "static/chunks/517-18179d5cba98216a.js",
+      "static/chunks/main-app-49217dcecddaa28d.js",
+      "static/css/f3881577f4f177cb.css",
+      "static/chunks/app/layout-b23ddb15284bd182.js"
+    ],
+    "/Service/page": [
+      "static/chunks/webpack-88e8c2996c15b7e9.js",
+      "static/chunks/4bd1b696-aaf09b882924c802.js",
+      "static/chunks/517-18179d5cba98216a.js",
+      "static/chunks/main-app-49217dcecddaa28d.js",
+      "static/chunks/8e1d74a4-53b234e83e37bc21.js",
+      "static/chunks/851-4433299a8e383074.js",
+      "static/chunks/app/Service/page-6ecf367c0471c75d.js"
+    ],
     "/AboutUS/page": [
-      "static/chunks/_a91c21._.js",
-      "static/chunks/src_app_favicon_ico_mjs_ddfdf0._.js",
-      "static/chunks/[root of the server]__7db745._.css",
-      "static/chunks/src_app_layout_tsx_20a9fc._.js",
-      "static/chunks/src_app_layout_tsx_61af54._.js",
-      "static/chunks/node_modules_next_46a80f._.js",
-      "static/chunks/node_modules_react-icons_fa_index_mjs_d2e2d7._.js",
-      "static/chunks/node_modules_react-icons_lib_74ccc9._.js",
-      "static/chunks/src_app_f6b056._.js",
-      "static/chunks/src_app_AboutUS_page_tsx_5dd57b._.js",
-      "static/chunks/node_modules_next_dist_compiled_react-dom_1f56dc._.js",
-      "static/chunks/node_modules_next_dist_compiled_107ce8._.js",
-      "static/chunks/node_modules_next_dist_client_523921._.js",
-      "static/chunks/node_modules_next_dist_4bb10e._.js",
-      "static/chunks/node_modules_@swc_helpers_cjs_00636a._.js",
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_d0a96d._.js",
-      "static/chunks/_e69f0d._.js",
-      "static/chunks/_d95469._.js"
+      "static/chunks/webpack-88e8c2996c15b7e9.js",
+      "static/chunks/4bd1b696-aaf09b882924c802.js",
+      "static/chunks/517-18179d5cba98216a.js",
+      "static/chunks/main-app-49217dcecddaa28d.js",
+      "static/chunks/8e1d74a4-53b234e83e37bc21.js",
+      "static/chunks/851-4433299a8e383074.js",
+      "static/chunks/app/AboutUS/page-0b845f7a4fde4edf.js"
     ],
     "/page": [
-      "static/chunks/_a91c21._.js",
-      "static/chunks/src_app_favicon_ico_mjs_ddfdf0._.js",
-      "static/chunks/[root of the server]__7db745._.css",
-      "static/chunks/src_app_layout_tsx_20a9fc._.js",
-      "static/chunks/src_app_layout_tsx_61af54._.js",
-      "static/chunks/src_app_9ec42c._.js",
-      "static/chunks/node_modules_next_fb9583._.js",
-      "static/chunks/node_modules_react-icons_fa_index_mjs_d2e2d7._.js",
-      "static/chunks/node_modules_react-icons_lib_74ccc9._.js",
-      "static/chunks/node_modules_framer-motion_dist_es_dec347._.js",
-      "static/chunks/node_modules_393e0a._.js",
-      "static/chunks/src_app_page_tsx_5dd57b._.js",
-      "static/chunks/node_modules_next_dist_compiled_react-dom_1f56dc._.js",
-      "static/chunks/node_modules_next_dist_compiled_107ce8._.js",
-      "static/chunks/node_modules_next_dist_client_523921._.js",
-      "static/chunks/node_modules_next_dist_4bb10e._.js",
-      "static/chunks/node_modules_@swc_helpers_cjs_00636a._.js",
-      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_d0a96d._.js",
-      "static/chunks/_e69f0d._.js",
-      "static/chunks/_d95469._.js"
+      "static/chunks/webpack-88e8c2996c15b7e9.js",
+      "static/chunks/4bd1b696-aaf09b882924c802.js",
+      "static/chunks/517-18179d5cba98216a.js",
+      "static/chunks/main-app-49217dcecddaa28d.js",
+      "static/chunks/8e1d74a4-53b234e83e37bc21.js",
+      "static/chunks/851-4433299a8e383074.js",
+      "static/chunks/154-68621ab1c668c8c9.js",
+      "static/chunks/app/page-a496dd2324d6385a.js"
     ]
   }
 }

@@ -1,4 +1,4 @@
-// File: C:\Users\bhatt\OneDrive\Desktop\office_work\BHISAY IT\it-consultancy\src\app\Service\page.tsx
+// File: C:\Users\bhatt\OneDrive\Desktop\New Bhisayitweb\BHIsay_it (copy)\it-consultancy\src\app\Service\page.tsx
 import * as entry from '../../../../src/app/Service/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
