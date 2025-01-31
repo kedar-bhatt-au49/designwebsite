@@ -1,0 +1,24 @@
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <filter x="-60%" y="-60%" width="220%" height="220%" id="a">
+            <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" in="shadowBlurOuter1" result="shadowMatrixOuter1"/>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+        <path id="b" d="M0 0h9.888v8.5H0z"/>
+    </defs>
+    <g filter="url(#a)" fill="none" fill-rule="evenodd">
+        <path d="M.112 11.5A10.012 10.012 0 0 0 7 19.542V11.5H.112zM7 .458A10.014 10.014 0 0 0 .11 8.5H7V.458zM10 20h.02c5.003-.01 9.145-3.695 9.868-8.5H10V20z" fill="#D00C33"/>
+        <g transform="translate(10)">
+            <mask id="c" fill="#fff">
+                <use xlink:href="#b"/>
+            </mask>
+            <path d="M0 8.5h9.888C9.165 3.693 5.02.007.013 0H0v8.5z" fill="#D00C33" mask="url(#c)"/>
+        </g>
+        <path d="M10 11.5h9.888a10.077 10.077 0 0 0 0-3H10V0C8.955 0 7.947.161 7 .458V8.5H.112C.039 8.99 0 9.49 0 10s.04 1.011.112 1.5H7v8.042c.947.297 1.955.458 3 .458v-8.5z" fill="#FAFAFA"/>
+    </g>
+</svg>

@@ -1,0 +1,4 @@
+function popup_window(event, social_url){
+    event.preventDefault();
+    window.open(social_url, 'Social Share Window', 'toolbars=0,width=640,height=320,left=200,top=200,scrollbars=1,resizable=1');
+}

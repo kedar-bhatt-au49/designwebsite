@@ -1,0 +1,14 @@
+
+        if (!window.aptsent) {
+            var aptivreferrer = encodeURIComponent(document.referrer)
+            var aptivrnd = Math.random();
+            var aptivpage = encodeURIComponent(window.location.href);
+            var aptivurl = '//aptivio.azure-api.net/signalextract/Trackvisit?rnd=' + aptivrnd + '&page=' + aptivpage + '&referrer=' + aptivreferrer;
+
+            var aptivimg = document.createElement('img');
+            aptivimg.async=true;
+            aptivimg.src = aptivurl;
+            aptivimg.style='display:none;';
+            if (document.body) document.body.appendChild(aptivimg);
+            window.aptsent = true;
+        }

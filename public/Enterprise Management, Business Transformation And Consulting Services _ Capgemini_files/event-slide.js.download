@@ -1,0 +1,19 @@
+jQuery( document ).ready( function( $ ) {
+
+	$( '.box-event-title' ).each( function () {
+
+		$this = $( this );
+
+		let eventTitle = $this.text();
+
+		if ( eventTitle.length > 50 ) {
+
+			let eventID = $this.data( 'id' );
+
+			$( '#box_excerpt_' + eventID ).addClass( 'hide-event' );
+			$( '#box_brand_' + eventID ).addClass( 'hide-event' );
+		}
+
+	} );
+
+} );

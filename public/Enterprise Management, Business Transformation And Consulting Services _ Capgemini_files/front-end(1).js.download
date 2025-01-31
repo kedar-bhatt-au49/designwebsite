@@ -1,0 +1,83 @@
+(function( $, wp ) {
+
+  let pageNumber = 1;
+
+  let storiesContainer = $( '#stories_container' );
+  let storiesLoadMore = $( '#stories_loadmore' );
+  let storiesFilter = $( '.stories-filter' );
+
+  window.storiesObj = {
+
+    // function when like button clicked
+    loadMore: function ( selectedFilter, pageNumber, isLoadMore = true ) {
+
+      let params = {
+        nonce: socData.nonce,
+        page: pageNumber,
+        tag: selectedFilter,
+      };
+
+      // Ajax request to create account
+      let request = wp.ajax.post( 'load_more_stories', params );
+
+      // Check ajax response
+      request.done( function( data ) {
+
+        if ( '' !== data ) {
+
+          if ( ! isLoadMore ) {
+            storiesContainer.empty();
+
+            if ( data.count > 9 ) {
+              storiesLoadMore.removeClass( 'd-none' );
+            }
+          }
+
+          // NOTE: It is escaping from php's end, so ignoring it now.
+          storiesContainer.append( data.markup ); // phpcs:ignore WordPressVIPMinimum.JS.HTMLExecutingFunctions.append
+
+          if ( data.count < 9 ) {
+            storiesLoadMore.addClass( 'd-none' );
+          } else {
+            storiesLoadMore.removeClass( 'd-none' );
+          }
+        }
+
+      } );
+
+      request.fail( function( data ) {
+        console.log('===  Error ====');
+        console.log(data);
+      } );
+
+      request.always( function( data ) {
+
+        if ( '' === data.markup ) {
+          // Hide load more if data is not available.
+          storiesLoadMore.addClass( 'd-none' );
+        }
+
+      } );
+    },
+  };
+
+  storiesFilter.on( 'click', function( e ) {
+
+    e.preventDefault();
+
+    pageNumber = 1;
+
+    storiesObj.loadMore( $( this ).data( 'filter-tag' ), pageNumber, false );
+  } );
+
+  // LoadMore button call event.
+  storiesLoadMore.on( 'click', function () {
+
+    let selectedFilter = $( '.stories-filter.active' ).data( 'filter-tag' );
+
+    pageNumber = pageNumber + 1;
+
+    storiesObj.loadMore( selectedFilter, pageNumber );
+  } );
+
+})( jQuery, window.wp );

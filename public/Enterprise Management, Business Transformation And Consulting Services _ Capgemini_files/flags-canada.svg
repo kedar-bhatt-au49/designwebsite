@@ -1,0 +1,31 @@
+<svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path id="b" d="M0 0h4v16H0z"/>
+        <path id="d" d="M0 0h12v20H0z"/>
+        <filter x="-60%" y="-60%" width="220%" height="220%" id="a">
+            <feOffset dy="2" in="SourceAlpha" result="shadowOffsetOuter1"/>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"/>
+            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.2 0" in="shadowBlurOuter1" result="shadowMatrixOuter1"/>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"/>
+                <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+        </filter>
+    </defs>
+    <g filter="url(#a)" fill="none" fill-rule="evenodd">
+        <path d="M0 10a9.988 9.988 0 0 0 3.999 8V2A9.986 9.986 0 0 0 0 10" fill="#E31937"/>
+        <g transform="translate(15.999 2)">
+            <mask id="c" fill="#fff">
+                <use xlink:href="#b"/>
+            </mask>
+            <path d="M4 8a9.984 9.984 0 0 0-4-8v16a9.985 9.985 0 0 0 4-8" fill="#E31937" mask="url(#c)"/>
+        </g>
+        <g transform="translate(3.999)">
+            <mask id="e" fill="#fff">
+                <use xlink:href="#d"/>
+            </mask>
+            <path d="M0 2v16a9.962 9.962 0 0 0 6.001 2 9.954 9.954 0 0 0 6-2V2a9.948 9.948 0 0 0-6-2A9.959 9.959 0 0 0 0 2" fill="#FAFAFA" mask="url(#e)"/>
+        </g>
+        <path d="M9.999 15.829h.205l-.066-2.723c0-.09.115-.164.19-.163.854.103 1.62.194 2.473.298l-.217-.744a.352.352 0 0 1 .112-.353l2.48-2.106-.514-.252c-.224-.085-.161-.218-.08-.537l.378-1.44-1.44.318a.22.22 0 0 1-.256-.16l-.186-.677-1.139 1.334c-.162.212-.49.212-.388-.282l.487-2.7-.652.354c-.184.106-.367.124-.471-.068L9.999 4.17l-.916 1.758c-.103.192-.286.174-.47.068l-.652-.354.487 2.7c.101.494-.226.494-.388.282L6.92 7.29l-.184.677a.221.221 0 0 1-.256.16L5.04 7.81l.378 1.439c.081.319.145.452-.08.537l-.515.252 2.48 2.106c.098.079.149.222.113.353l-.217.744c.853-.104 1.62-.195 2.472-.298.077 0 .191.073.19.163l-.065 2.723h.204z" fill="#E31937"/>
+    </g>
+</svg>

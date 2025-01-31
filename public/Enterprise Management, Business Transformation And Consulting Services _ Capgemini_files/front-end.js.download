@@ -1,0 +1,13 @@
+jQuery( document ).ready( function( $ ) {
+
+	let employeeTitle = $( '#employee_title' );
+
+	if ( employeeTitle.length > 0 ) {
+
+		if ( employeeTitle.text().length > 20 ) {
+
+			$( '#employee_tags' ).addClass( 'hide-tags' );
+		}
+	}
+
+} );

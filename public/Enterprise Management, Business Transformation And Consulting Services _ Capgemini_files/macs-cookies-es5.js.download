@@ -1,0 +1,718 @@
+jQuery(document).ready(function($) {
+    var macsCookies = new function() {
+
+        var self = this
+
+        self.config = {
+            'consentLifeDays': 90,
+            'cookieGroups': [
+                'necessary',
+                'functional',
+                'statistics',
+                'targeting'
+            ]
+        }
+
+        // Hide overlay
+        $('body').click(function() {
+            $('.cookieConsent__overlay.overlay-on').hide();
+        });
+
+        // Local variable cache for user preferences
+        self.allowedCookies = [];
+
+        // Modify the printEmbeds function to take a type parameter
+        self.printEmbeds = function(type) {
+            var selector = '';
+            if (type === 'soundcloud') {
+                selector = '.embed_placeholder_soundcloud';
+            } else if (type === 'youtube') {
+                selector = '.embed_placeholder_youtube';
+            } else {
+                // If no specific type is provided, default to updating all embeds
+                selector = '.embed_placeholder';
+            }
+            $(selector).each(function() {
+                var url = $(this).data('url');
+                var iframeH = $(this).data('height');
+                var iframeW = $(this).data('width');
+                var fieldIdInput = $('<iframe />', {
+                    'class': 'embed_new_' + type,
+                    'src': url,
+                    'height': iframeH,
+                    'width': iframeW,
+                    'frameborder': '0',
+                    'allow': 'autoplay; encrypted-media',
+                    'allowfullscreen': 'allowfullscreen'
+                });
+                $(this).replaceWith(fieldIdInput);
+            });
+        };
+
+        function handleConsentMessage(event) {
+            // Check the origin for security reasons
+            // if (event.origin !== "YourTrustArcOrigin") {
+            //     console.warn("Received message from unexpected origin:", event.origin);
+            //     return;
+            // }
+        
+            console.log("Consent message received", event.data);
+
+            try {
+                var data = (event?.data && typeof event.data === 'string') ? JSON.parse(event.data) : event.data;
+                console.log("Parsed data:", data);
+        
+                if (data?.source === "preference_manager") {
+                    switch (data.message) {
+                        case "submit_preferences":
+                            // Extracting the consent values
+                            var consentValues;
+                            if (typeof data.data === 'string') {
+                                // Handles the case where data is a string (like "0,1,2,3")
+                                consentValues = data.data.split(',');
+                            } else {
+                                // Handles the case where data is an object with a 'value' property
+                                consentValues = data.data.value.split(',');
+                            }
+        
+                            // Check if all cookie categories are accepted
+                            if (consentValues.length === 4 && consentValues.includes('0') && consentValues.includes('1') && consentValues.includes('2') && consentValues.includes('3')) {
+                                console.log('User selected Accept All');
+                                printEmbeds('soundcloud');
+                                printEmbeds('youtube');
+                                //opt-in if user allows
+                                if(window.pa){
+                                    try {
+                                        window.pa.consent.setMode('opt-in');
+                                    } catch (e){
+                                        console.log('piano consent error', e);
+                                    }
+                                }
+                            } else if (consentValues.length === 1 && consentValues[0] === '0') {
+                                console.log('User selected Decline All');
+                                hideEmbeds('soundcloud');
+                                hideEmbeds('youtube');
+                                //Defaults to essential if user don't allow
+                                if(window.pa){
+                                    try {
+                                        window.pa.consent.setMode('essential')
+                                    } catch (e){
+                                        console.log('piano consent error', e);
+                                    }
+                                }
+                            } else {
+                                // Handle individual consent changes
+                                if (consentValues.includes('3')) {
+                                    console.log('Printing SoundCloud embeds');
+                                    printEmbeds('soundcloud');
+
+                                    //opt-in if user allows
+                                    if(window.pa){
+                                        try {
+                                            window.pa.consent.setMode('opt-in')
+                                        } catch (e){
+                                            console.log('piano consent error', e);
+                                        }
+                                    }
+                                } else {
+                                    hideEmbeds('soundcloud');
+
+                                    //Defaults to essential if user don't allow
+                                    if(window.pa){
+                                        try {
+                                            window.pa.consent.setMode('essential')
+                                        } catch (e){
+                                            console.log('piano consent error', e);
+                                        }
+                                    }
+                                }
+                                if (consentValues.includes('2')) {
+                                    console.log('Printing YouTube embeds');
+                                    printEmbeds('youtube');
+
+                                    //Defaults to essential if user don't allow
+                                    if(window.pa){
+                                        try {
+                                            window.pa.consent.setMode('essential')
+                                        } catch (e){
+                                            console.log('piano consent error', e);
+                                        }
+                                    }
+                                } else {
+                                    hideEmbeds('youtube');
+
+                                    //Defaults to essential if user don't allow
+                                    if(window.pa){
+                                        try {
+                                            window.pa.consent.setMode('essential')
+                                        } catch (e){
+                                            console.log('piano consent error', e);
+                                        }
+                                    }
+                                }
+                            }
+                            break;
+        
+                        case "truste-click-toggle-event":
+                            // Handle the consent toggle event for both "on" and "off"
+                            var categoryOn = data.data.match(/category-(\d+)-on/);
+                            var categoryOff = data.data.match(/category-(\d+)-off/);
+        
+                            if (categoryOff) {
+                                console.log('Category turned off:', categoryOff[1]);
+                                switch (categoryOff[1]) {
+                                    case '3': // Statistical cookies (SoundCloud)
+                                        hideEmbeds('soundcloud');
+                                        //if user removes consent
+                                        if(window.pa){
+                                            try {
+                                                window.pa.consent.setMode('essential')
+                                            } catch (e){
+                                                console.log('piano consent error', e);
+                                            }
+                                        }
+                                        break;
+                                    case '2': // Advertising cookies (YouTube)
+                                        hideEmbeds('youtube');
+                                        break;
+                                }
+                            } else if (categoryOn) {
+                                console.log('Category turned on:', categoryOn[1]);
+                                switch (categoryOn[1]) {
+                                    case '3': // Statistical cookies (SoundCloud)
+                                        printEmbeds('soundcloud');
+                                        //opt-in if user allows
+                                        if(window.pa){
+                                            try {
+                                                window.pa.consent.setMode('opt-in')
+                                            } catch (e){
+                                                console.log('piano consent error', e);
+                                            }
+                                        }
+                                        break;
+                                    case '2': // Advertising cookies (YouTube)
+                                        printEmbeds('youtube');
+                                        break;
+                                }
+                            }
+                            break;
+        
+                        // ... other cases
+                    }
+                }
+            } catch (e) {
+                console.error("Error handling consent message:", e);
+            }
+        }
+        
+        
+    
+        // Hide embeds and show placeholders
+        window.hideEmbeds = function(type) {
+            var expsnd = new RegExp(/(snd\.sc|soundcloud\.com|w\.soundcloud\.com)/);
+            var expyt = new RegExp(/(youtu\.be|youtube\.com)/);
+        
+            if (type === 'soundcloud') {
+                $('iframe').each(function() {
+                    var $this = $(this);
+                    var src = $this.attr('src');
+                    
+                    if (expsnd.test(src)) {
+                        var sndbUrl = src;
+                        var sndbH = $this.attr('height');
+                        var sndbW = $this.attr('width');
+        
+                        var placeholder = $('<div />', {
+                            'class': 'embed_placeholder_soundcloud embed_placeholder',
+                            'data-url': sndbUrl,
+                            'data-height': sndbH,
+                            'data-width': sndbW,
+                        });
+        
+                        placeholder.html(MACS_COOKIES.embedCookiesSnd);
+                        $this.replaceWith(placeholder);
+                    }
+                });
+            } else if (type === 'youtube') {
+                $('iframe').each(function() {
+                    var $this = $(this);
+                    var src = $this.attr('src');
+                    
+                    if (expyt.test(src)) {
+                        var ytbUrl = src;
+                        var ytbH = $this.attr('height');
+                        var ytbW = $this.attr('width');
+        
+                        var placeholder = $('<div />', {
+                            'class': 'embed_placeholder_youtube embed_placeholder',
+                            'data-url': ytbUrl,
+                            'data-height': ytbH,
+                            'data-width': ytbW,
+                        });
+        
+                        placeholder.html(MACS_COOKIES.embedCookiesYtb);
+                        $this.replaceWith(placeholder);
+                    }
+                });
+            }
+        }
+        
+        // Listen for messages from the TrustArc Consent Manager
+        window.addEventListener("message", handleConsentMessage, false);
+
+        self.trackUserConsent = function() {
+
+            $('#macs_cookies_accept_all').click(function(e) {
+                e.preventDefault()
+                // add GTM to track user consent- user accepted all cookies
+                if (typeof dataLayer !== 'undefined') {
+                    dataLayer.push({
+                        'event': 'user_consent',
+                        'consent_type': 'accept_all'
+                    })
+                }
+            })
+
+            $('#macs_cookies_save_preferences').click(function(e) {
+                e.preventDefault()
+
+                $('.cookieConsent__checkbox_container').each(function() {
+                    if ($(this).find('input').is(':checked')) {
+                        var input = $(this).find('input').attr('id');
+
+                        if (input === 'accept_cookie_statistics') {
+                            // add GTM to track user consent- user accepted statistics cookies
+                            if (typeof dataLayer !== 'undefined') {
+                                dataLayer.push({
+                                    'event': 'user_consent',
+                                    'consent_type': 'accept_statistics'
+                                })
+                            }
+                        }
+                    }
+                })
+            })
+
+        }
+        // You would typically do this once, possibly on page load
+        function checkConsentGiven() {
+            // Prepare the API object to request the consent decision
+            var apiObject = {
+                PrivacyManagerAPI: {
+                    action: "getConsentDecision",
+                    timestamp: new Date().getTime(),
+                    self: "qa.ucwe.capgemini.com" // Use the actual domain
+                }
+            };
+
+            // Convert the API object to a JSON string
+            var json = JSON.stringify(apiObject);
+
+            // Send the postMessage to the top window, which is where the TrustArc Consent Manager should be listening
+            window.top.postMessage(json, "*");
+        }
+
+        /**
+         * Kicks it off
+         */
+        self.init = function() {
+
+            /**
+             * If popup is initialized, we setup GTM scripts only after user's action.
+             * Otherwise we can do it based on current cookie preferences.
+             */
+            if (!self.popupInit()) {
+                self.setupGTMscripts()
+            }
+            $('iframe').each(function() {
+                var src = $(this).attr('src');
+                checkSrc(src, $(this));
+            });
+            // Set up a listener for the TrustArc consent decision
+            window.addEventListener("message", function(event) {
+                try {
+                    var data = (event?.data && typeof event.data === 'string') ? JSON.parse(event.data) : event.data;
+                    if (data && data.PrivacyManagerAPI && data.PrivacyManagerAPI.action === "getConsentDecision") {
+                        var consentDecision = data.PrivacyManagerAPI.consentDecision;
+                        // Update your cookie consent variable and trigger the iframe loading logic
+                        if (consentDecision) {
+                            $.cookie('cmapi_cookie_privacy', consentDecision, {
+                                path: '/',
+                                expires: 365
+                            });
+                            self.printEmbeds(); // Assuming this function loads the iframes
+                        }
+                    }
+                } catch (e) {
+                    console.error("Error parsing message data:", e);
+                }
+            }, false);
+            // PREFERENCES PAGE
+            self.bindPreferencesActions()
+            self.checkAllowedBoxes()
+
+            // Block embeds
+            self.blockEmbeds() // Block  embeds function
+            self.trackUserConsent() // track user consent
+        }
+
+        /**
+         * Cookie helpers
+         */
+        self.getCookie = function(name) {
+            var re = new RegExp(name + '=([^;]+)')
+            var value = re.exec(document.cookie)
+            return (value != null) ? unescape(value[1]) : null
+        }
+
+        self.setCookie = function(name, value, days) {
+            var t = new Date()
+            t.setTime(t.getTime() + 24 * days * 60 * 60 * 1e3)
+            var expires = 'expires=' + t.toUTCString()
+            document.cookie = name + '=' + value + ';' + expires + ';path=/'
+        }
+
+        self.deleteCookie = function(name) {
+            document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        }
+
+        self.cookieExists = function(name) {
+            return self.getCookie(name) !== null
+        }
+
+        /**
+         * Clears local variable cache
+         */
+        self.resetAllowedCookies = function() {
+            self.allowedCookies = []
+        }
+
+        /**
+         * Rebuilds local variable cache for user preferences based on saved cookies
+         */
+        self.getAllowedCookies = function() {
+
+            self.resetAllowedCookies()
+
+            $(self.config.cookieGroups).each(function(i, val) {
+                var cookieName = 'macs_cookies_' + val + '_' + MACS_COOKIES.ID
+
+                if (self.cookieExists(cookieName)) {
+                    self.allowedCookies.push(val)
+                }
+
+            })
+        }
+
+        /**
+         * Recreates GTM scripts based on plain text templates
+         */
+        self.setupGTMscripts = function() {
+            self.getAllowedCookies()
+
+            window.dataLayer = window.dataLayer || [];
+
+            $(self.allowedCookies).map(function(val) {
+                var gtmTemplate = $('.macs_cookies_gtm_' + self.allowedCookies[val])
+
+                gtmTemplate.each(function() {
+                    if ($(this).length && $(this).text() != '') {
+                        self.insertScriptElement($(this).text())
+                    }
+                })
+            })
+        }
+
+        /**
+         * Insets script element into DOM
+         */
+        self.insertScriptElement = function(scriptText) {
+            $el = $('<script>', {
+                'text': scriptText
+            })
+            $el.appendTo($('body'))
+        }
+
+        /**
+         * Refreshes general consent data by setting it up to current date and current policy version
+         */
+        self.refreshConsentData = function() {
+            self.deleteCookie('macs_cookies_consent_' + MACS_COOKIES.ID);
+            self.deleteCookie('macs_cookies_policy_v_' + MACS_COOKIES.ID);
+            self.setCookie('macs_cookies_consent_' + MACS_COOKIES.ID, 1, self.config.consentLifeDays);
+            self.setCookie('macs_cookies_policy_v_' + MACS_COOKIES.ID, MACS_COOKIES.cookiePolicyVersion, self.config.consentLifeDays);
+        }
+
+        // USER PREFERENCES METHODS
+
+        /**
+         * Binds actions to save button
+         */
+        self.bindPreferencesActions = function() {
+            $('#macs_cookies_save_preferences').click(function(e) {
+                /**
+                 * @todo The closing of the cookie popup need to be extracted
+                 * into a callable function which can be called from other
+                 * parts of the code
+                 */
+                e.preventDefault()
+                self.resetUserSettings();
+                self.saveUserSettings();
+                $('#popup-cookieConsent').hide();
+                $('.cookieConsent__overlay.overlay-on').hide();
+                $('.macs_cookies_saved').fadeIn(200, function() {
+                    setTimeout(function() {
+                        $('.macs_cookies_saved').fadeOut(200)
+                    }, 2000)
+                })
+            })
+        }
+
+        /**
+         * Checks checkboxes on settings page based on existing cookies
+         */
+        self.checkAllowedBoxes = function() {
+            self.getAllowedCookies();
+            $(self.allowedCookies).map(function(val) {
+                $('#accept_cookie_' + self.allowedCookies[val]).prop('checked', true)
+            })
+        }
+
+        /**
+         * Resets all user preferences (not the concent itself)
+         */
+        self.resetUserSettings = function() {
+            $(self.config.cookieGroups).each(function(i, val) {
+                var cookieName = 'macs_cookies_' + val + '_' + MACS_COOKIES.ID
+                self.deleteCookie(cookieName);
+            })
+        }
+
+        /**
+         * Saves user settings as cookies
+         */
+        self.saveUserSettings = function() {
+            $('input[name="accept_cookies[]"]:checked').each(function() {
+                self.setCookie('macs_cookies_' + $(this).val() + '_' + MACS_COOKIES.ID, 1, self.config.consentLifeDays)
+            })
+
+            // always set necessary when settings are saved (since the checkbox is required)
+            self.setCookie('macs_cookies_necessary_' + MACS_COOKIES.ID, 1, self.config.consentLifeDays)
+
+            // Set general consent cookies
+            self.refreshConsentData()
+
+            // Hide the popup
+            $('#popup-cookieConsent').hide();
+            $('.cookieConsent__overlay.overlay-on').hide();
+            // Do the GTM switcheroo from plaintext to script.
+            self.setupGTMscripts()
+        }
+
+        // POPUP
+
+        /**
+         * Initializes popup in following scenarios
+         * - User did not accept cookies yet
+         * - Cookie Policy version is changed since the user accepted policy
+         *
+         * NOTE: will also reset existing user settings in the cases described above.
+         */
+        self.popupInit = function() {
+            if (
+                self.cookieExists('macs_cookies_consent_' + MACS_COOKIES.ID) &&
+                self.cookieExists('macs_cookies_policy_v_' + MACS_COOKIES.ID) &&
+                self.getCookie('macs_cookies_policy_v_' + MACS_COOKIES.ID) === MACS_COOKIES.cookiePolicyVersion) {
+                return false;
+            }
+
+            // Reset user preferences, they're outdated anyway
+            self.resetUserSettings()
+
+            // Show popup
+            $('#popup-cookieConsent').show();
+            $('.cookieConsent__overlay.overlay-on').show();
+            self.bindPopupActions()
+
+            return true;
+        }
+
+        /**
+         * Binds actions to user clicks
+         */
+        self.bindPopupActions = function() {
+            $('.macs_cookies_accept_necessary').click(function(e) {
+                e.preventDefault()
+
+                // 1. Reset previous consent cookies if exist
+                self.resetUserSettings()
+                // 2. Set only necessary consent cookie
+                self.setCookie('macs_cookies_necessary_' + MACS_COOKIES.ID, 1, self.config.consentLifeDays)
+                // 3. Refresh consent date and cookie policy version to renew the consent lifespan
+                self.refreshConsentData()
+                // 4. Hide the popup
+                $('#popup-cookieConsent').hide();
+                $('.cookieConsent__overlay.overlay-on').hide()
+                // 5. Do the GTM switcheroo from plaintext to script.
+                self.setupGTMscripts()
+            })
+
+            $('.macs_cookies_accept_all').click(function(e) {
+                e.preventDefault()
+
+                // 1. Reset previous consent cookies if exist
+                self.resetUserSettings()
+                // 2. Set all consent cookies
+                $(self.config.cookieGroups).each(function(i, val) {
+                    var cookieName = 'macs_cookies_' + val + '_' + MACS_COOKIES.ID
+                    self.setCookie(cookieName, 1, self.config.consentLifeDays)
+                })
+                // 3. Refresh consent date and cookie policy version to renew the consent lifespan
+                self.refreshConsentData()
+                // 4. Hide the popup
+                $('#popup-cookieConsent').hide();
+                $('.cookieConsent__overlay.overlay-on').hide();
+                // 5. Do the GTM switcheroo from plaintext to script.
+                self.setupGTMscripts()
+                // 6. Reflect data on settings page if it's currently viewed
+                self.checkAllowedBoxes()
+                // 7. Print embeds
+                self.printEmbeds() // Print embeds function
+            })
+
+            // Hide overlay if cookie settings page
+            var isCookieSettingsPage = document.getElementsByClassName('cookie_section--settings');
+            if (isCookieSettingsPage.length > 0) {
+                $('.cookieConsent__overlay.overlay-on').hide();
+            }
+        }
+
+        self.blockEmbeds = function() {
+            // If cookies non exist, hide the embeds
+            if (self.cookieExists('macs_cookies_statistics_' + MACS_COOKIES.ID)) {
+                return true;
+            }
+
+            var frames = document.getElementsByTagName('iframe');
+
+            if (!frames.length) {
+                return
+            }
+
+            //  check if are iframes
+            $(frames).each(function() {
+                $(this).addClass('iframe_withoutcookies')
+            });
+
+            $('.iframe_withoutcookies').each(function() {
+                if ($(this).attr("title") != 'reCAPTCHA') {
+
+                    var tasrc = $(this).data('ta-src');
+                    var src = $(this).attr('src');
+                    if (src != '' && typeof(src) != 'undefined') {
+                        checkSrc(src, $(this));
+                    }
+                    if (tasrc != '' && typeof(tasrc) != 'undefined') {
+                        checkSrc(tasrc, $(this));
+                    }
+
+                }
+            });
+
+        }
+
+        function checkSrc(src, $this) {
+            // Identify Soundcloud iframe
+            var expsnd = new RegExp(/(snd\.sc|soundcloud\.com|w\.soundcloud\.com)/);
+            // Identify Youtube iframe
+            var expyt = new RegExp(/(youtu\.be|youtube\.com)/);
+            var ta_permit = typeof($.cookie('cmapi_cookie_privacy')) == 'undefined' ? '' : $.cookie('cmapi_cookie_privacy');
+
+            // Soundcloud
+            if (expsnd.test(src)) {
+
+                if ((ta_permit == '') || (ta_permit.indexOf('3') <= -1)) {
+                    var sndbUrl = src;
+                    var sndbH = $this.attr('height');
+                    var sndbW = $this.attr('width');
+                    var fieldIdInput = $('<div />', {
+                        'class': 'embed_placeholder_soundcloud embed_placeholder',
+                        'data-url': sndbUrl,
+                        'data-height': sndbH,
+                        'data-width': sndbW,
+                    })
+
+                    fieldIdInput.html(MACS_COOKIES.embedCookiesSnd)
+                    $this.replaceWith(fieldIdInput)
+                }
+
+            } else if (expyt.test(src)) {
+                //youtube
+
+                if ((ta_permit == '') || (ta_permit.indexOf('4') <= -1)) {
+                    $this.addClass('youtube')
+
+                    var ytbUrl = src;
+                    var ytbH = $this.height();
+                    var ytbW = $this.width();
+
+                    var fieldIdInput = $('<div />', {
+                        'class': 'embed_placeholder_youtube embed_placeholder',
+                        'data-url': ytbUrl,
+                        'data-height': ytbH,
+                        'data-width': ytbW,
+                    })
+
+                    fieldIdInput.html(MACS_COOKIES.embedCookiesYtb)
+                    $this.replaceWith(fieldIdInput)
+                }
+
+            }
+
+        }
+        checkConsentGiven();
+
+        window.printEmbeds = function(type) {
+            if (type === 'soundcloud') {
+                $('.embed_placeholder_soundcloud').each(function() {
+                    var url = $(this).attr('data-url');
+                    var iframeH = $(this).attr('data-height');
+                    var iframeW = $(this).attr('data-width');
+
+                    var fieldIdInput = $('<iframe />', {
+                        'class': 'embed_new_soundcloud',
+                        'src': url,
+                        'height': iframeH,
+                        'width': iframeW,
+                        'frameborder': '0',
+                        'allow': 'autoplay; fullscreen',
+                        'allowfullscreen': ''
+                    });
+
+                    $(this).replaceWith(fieldIdInput);
+                });
+            } else if (type === 'youtube') {
+                $('.embed_placeholder_youtube').each(function() {
+                    var url = $(this).attr('data-url');
+                    var iframeH = $(this).attr('data-height');
+                    var iframeW = $(this).attr('data-width');
+
+                    var fieldIdInput = $('<iframe />', {
+                        'class': 'embed_new_youtube',
+                        'src': url,
+                        'height': iframeH,
+                        'width': iframeW,
+                        'frameborder': '0',
+                        'allow': 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture',
+                        'allowfullscreen': ''
+                    });
+
+                    $(this).replaceWith(fieldIdInput);
+                });
+            }
+        }
+        checkConsentGiven();
+    }
+    macsCookies.init()
+
+})

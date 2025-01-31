@@ -1,0 +1,12 @@
+function vm_pixelDownload(url) {
+    var image = document.createElement('img');
+    image.src = url;
+    image.width = image.height = 0;
+    document.body.appendChild(image);
+}
+function vm_scriptInsert(url) {
+    var script = document.createElement('script');
+    script.src = url;
+    document.body.appendChild(script);
+}
+vm_scriptInsert('https://d2hya7iqhf5w3h.cloudfront.net/scripts/analytics-min.js')

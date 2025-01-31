@@ -1,0 +1,6 @@
+
+function ta_click() {   
+  
+    truste.eu && truste.eu.clickListener();
+
+}

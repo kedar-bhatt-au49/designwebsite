@@ -1,0 +1,181 @@
+.mf_form__success,
+.mf_form__errors,
+.mf_field--hidden {
+  display: none;
+}
+
+.mf-loading-icon {
+  height: 50px;
+
+  /* Must need to add this as this is overriding by other element's styling */
+  width: 50px !important;
+}
+
+slide-confirm-btn, slide-confirm-btn > confirm {
+  position: relative;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  min-width: 240px;
+  height: 40px;
+  line-height: 40px;
+  vertical-align: middle;
+  text-align: center;
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  border-top: 1px solid #DEDEDE;
+  box-shadow: 0 1px 10px #DEDEDE;
+  border-radius: 50px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 300;
+  color: #000;
+  cursor: url(grab.cur), pointer;
+  overflow: hidden;
+}
+
+slide-confirm-btn:active, slide-confirm-btn:active > confirm {
+  cursor: url(grabbing.cur), pointer;
+}
+
+slide-confirm-btn > confirm {
+  display: block;
+  position: absolute;
+  top: 0;
+  padding: 0;
+  /* right: 83% !important; */
+  width: 100%;
+  border: none;
+  background: #fff;
+}
+
+slide-confirm-btn > confirm:after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 15px;
+  content: "\f061";
+  font-family: "FontAwesome";
+  font-weight: normal;
+  background: #260D35;
+  border-radius: 50%;
+  color: #fff;
+}
+
+slide-confirm-btn[disabled], slide-confirm-btn[disabled] > confirm {
+  cursor: default !important;
+}
+
+slide-confirm-btn[disabled] > confirm:after {
+  content: "\f00c";
+  background: #2A9C4E;
+}
+
+confirm {
+  position: absolute;
+  right: 83%;
+  font-size: 12px;
+  color: #888;
+  transition: background-color 0.3s; /* Add a transition for a smooth color change */
+}
+
+slide-confirm-btn:hover > confirm:after {
+  background-color: #0CE2DF; /* Change the background color on slide-confirm-btn hover */
+}
+
+.mf_forms__container .mf_form__form .mf_field.mf_field--submit{margin-top: 0rem;}
+
+/* ---------------------------------------------- */
+#button-background {
+  position: relative;
+  box-shadow: 0 1px 10px #000000;
+  background:#ffffff;
+  width: 240px;
+  height: 40px;
+  border: white;
+  border-radius: 40px;
+  border-color: #DEDEDE;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#slider {
+  transition: width 0.3s, border-radius 0.3s, height 0.3s;
+  position: absolute;
+  left: -10px;
+  background-color: #260D35;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#slider:hover{
+  background-color: #0CE2DF;
+}
+
+#slider.unlocked {
+  transition: all 0.3s;
+  width: inherit;
+  left: 0 !important;
+  height: inherit;
+  border-radius: inherit;
+}
+
+.arrow-icon{
+  font-size:30px;
+  color :#fff;
+}
+
+.material-icons {
+  color: #fff;
+  font-size: 30px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.slide-text {
+  color: #000000;
+  font-size: 12px;
+  font-family: "Ubuntu";  
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+.submitted{
+  font-size: 24px;
+  color: #000;
+  background-color: #2A9C4E !important;
+}
+
+.arrow-icon:after{ 
+  content:"";
+    background: url(../img/icon-more-small-white.svg) no-repeat;
+    width: 24px;
+    height: 24px;   
+    transition: all .2s ease-out;    
+    display: block;
+}
+
+.tick-icon:after{
+  content:"";
+  background: url(../img/icons-tick.svg) no-repeat;
+  width: 24px;
+  height: 24px;
+  transition: all .2s ease-out;  
+  display: block;
+}
